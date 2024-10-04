@@ -1,0 +1,38 @@
+@import "variables.scss";
+@import "components.scss";
+@import "elements.scss";
+@import "beneficiarios.scss";
+@import "atualizarInformacoes.scss";
+
+@font-face {
+  font-family: "Switzerland";
+  src: url("@fonts/Switzerland/switzerland-1.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+* {
+  font-family: "Switzerland";
+  margin: 0;
+  padding: 0;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+}
+
+.landing-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.pages {
+  min-height: 500px;
+  flex-grow: 1;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
