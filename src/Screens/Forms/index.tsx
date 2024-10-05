@@ -9,30 +9,34 @@ const Forms = () => {
 
             <div className="form-control">
                 <div className="input-group">
-                    <label>Nome da Família:</label>
-                    <input type="text" placeholder="Nome da Família" />
+                    <label>Nome:</label>
+                    <input type="text" placeholder="Nome" />
 
-                    <label>Campo 2:</label>
-                    <input type="text" placeholder="Campo 2" />
+                    <label>CPF:</label>
+                    <input type="text" placeholder="CPF" />
 
-                    <label>Campo 3:</label>
-                    <input type="text" placeholder="Campo 3" />
+                    <label>Telefone:</label>
+                    <input type="text" placeholder="Telefone" />
+
+                    <label>Motivo do cadastro:</label>
+                    <input type="text" placeholder="Motivo do Cadastro" />
                 </div>
 
                 <div className="dropdown-button-group">
                     <div className="dropdown-group">
-                        <label>Dropdown 1</label>
+                        <label>Casa Atual</label>
                         <select>
-                            <option>Option 1</option>
-                            <option>Option 2</option>
-                            <option>Option 3</option>
+                            <option>Aluguel</option>
+                            <option>Casa própria</option>
+                            <option>Não possui</option>
                         </select>
 
-                        <label>Dropdown 2</label>
+                        <label>Quantidade de integrantes na família</label>
                         <select>
-                            <option>Option 1</option>
-                            <option>Option 2</option>
-                            <option>Option 3</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>+5</option>
                         </select>
                     </div>
                 </div>
