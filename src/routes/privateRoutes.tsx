@@ -19,16 +19,16 @@ export function PrivateRoutes() {
 
     const verifyLogin = async () => {
 
-        if (!user) {
-            navigate("/login");
+        if(user && user.role !== 'BENEFICIARIO') {
+            navigate('/dashboard');
         }
 
-        if(location.pathname.includes('dashboard') && user?.role === 'BENEFICIARIO') {
-            navigate("/");
+        if(user && user.role === 'BENEFICIARIO') {
+            navigate('/');
         }
 
-        if(location.pathname.includes('dashboard') && user?.role !== 'BENEFICIARIO') {
-            navigate("/dashboard");
+        if(!user && location.pathname.includes("dashboard")) {
+            navigate('/');
         }
 
     };
