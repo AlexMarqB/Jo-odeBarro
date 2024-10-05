@@ -1,11 +1,13 @@
 import React, { createContext, useState, useContext, ReactNode } from 'react';
 import { api } from '../api';
 import { User } from '../@types';
+import { useNavigate } from 'react-router-dom';
 
 interface AuthContextType {
     user: User | null;
     login: ({email, password}: LoginRequest) => void;
     logout: () => void;
+    navigate: (path: string) => void;
 }
 
 interface LoginRequest {
@@ -16,6 +18,8 @@ interface LoginRequest {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+    const navigate = useNavigate()
+
     const [user, setUser] = useState<User | null>(null);
 
     const login = async ({email, password}: LoginRequest) => {
@@ -35,10 +39,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
     const logout = () => {
         setUser(null);
+        navigate("/")
     };
 
     return (
-        <AuthContext.Provider value={{ user, login, logout }}>
+        <AuthContext.Provider value={{ user, login, logout, navigate }}>
             {children}
         </AuthContext.Provider>
     );

@@ -4,7 +4,7 @@ import { FaUsers, FaBox, FaMoneyBill, FaCalendarAlt, FaBuilding, FaNewspaper } f
 import { useNavigate } from 'react-router-dom';
 
 const DashboardPage = () => {
-  const navigate = useNavigate();
+  const {navigate} = useAuth();
 
   return (
     <div className="container text-center my-5" style={{ padding: "200px" }}>

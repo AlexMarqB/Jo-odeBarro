@@ -2,10 +2,10 @@ import { useState } from 'react';
 import '@styles/global.scss';
 import '@styles/registroVisita.scss';
 import { api } from '../../api';
-import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../contexts/loginContext';
 
 const RegistroVisita = () => {
-    const navigate = useNavigate();
+    const {navigate} = useAuth();
 
     const [nomeBeneficiario, setNomeBeneficiario] = useState(''); 
     const [nomeVoluntarios, setNomeVoluntarios] = useState(''); 

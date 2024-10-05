@@ -1,4 +1,4 @@
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import { useAuth } from "../contexts/loginContext";
 import { Beneficiarios } from "../Screens/Beneficiarios";
 import AtualizarInformacoes from "../Screens/AtualizarInformacoes";
@@ -10,8 +10,7 @@ import DashboardPage from "../Screens/Dashboard";
 import { useEffect } from "react";
 
 export function PrivateRoutes() {
-    const {user} = useAuth();
-    const navigate = useNavigate();
+    const {user, navigate} = useAuth();
 
     useEffect(() => {
         verifyLogin();

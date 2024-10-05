@@ -14,5 +14,5 @@ As famílias assistidas pelo Instituto João de Barro são indicadas por conheci
 ### Projeto
 - Esse projeto utiliza a versão do **Node v22.2.0**
 1. Para instalar as dependências do projeto use `npm install`
-2. Para rodar o projeto use `npm run dev`  
+2. Para rodar o projeto use `npm run dev` e em outro terminal execute `npm run db` 
 # Jo-odeBarro

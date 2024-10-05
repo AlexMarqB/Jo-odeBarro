@@ -2,11 +2,12 @@ import { useState } from 'react';
 import '@styles/global.scss';
 import '@styles/registro.scss';
 import { api } from '../../api';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { z } from 'zod';
+import { useAuth } from '../../contexts/loginContext';
 
 const Registro = () => {
-    const navigate = useNavigate();
+    const {navigate} = useAuth();
 
     const location = useLocation();
 

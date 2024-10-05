@@ -2,17 +2,19 @@ import '@styles/global.scss';
 import '@styles/atualizarInformacoes.scss';
 import { api } from '../../api';
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { AxiosError } from 'axios';
 import { z } from 'zod';
+import { useAuth } from '../../contexts/loginContext';
 
 function isAxiosError(error: unknown): error is AxiosError {
     return (error as AxiosError).isAxiosError !== undefined;
 }
 
 const AtualizarInformacoes = () => {
+    const {navigate} = useAuth();
+
     const { familiaId } = useParams();
-    const navigate = useNavigate();
     const [nomeFamilia, setNomeFamilia] = useState('');
     const [statusFamilia, setStatusFamilia] = useState('');
     const [nomePrincipal, setNomePrincipal] = useState('');

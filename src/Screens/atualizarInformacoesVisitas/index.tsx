@@ -6,7 +6,7 @@ import { api } from '../../api';
 
 const AtualizarInformacoesVisitas = () => {
     const { id } = useParams();
-    const navigate = useNavigate();
+    const {navigate} = useAuth();
     const [nomeFamilia, setNomeFamilia] = useState('');
     const [relatorio, setRelatorio] = useState('');
     const [dropdown1, setDropdown1] = useState('');

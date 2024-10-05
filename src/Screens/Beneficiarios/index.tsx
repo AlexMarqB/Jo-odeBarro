@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from 'react-router-dom';
 import "@styles/global.scss";
 import { api } from "../../api";
 import { Familia, Visit } from "../../@types";
+import { useAuth } from "../../contexts/loginContext";
 
 export function Beneficiarios() {
   const [activeTab, setActiveTab] = useState<'familias' | 'visitas'>('familias');
   const [searchTerm, setSearchTerm] = useState('');
-  const navigate = useNavigate();
+  const {navigate} = useAuth();
 
   const [familias, setFamilias] = useState<Familia[]>([]);
   const [filteredFamilies, setFilteredFamilies] = useState<Familia[]>([]);
