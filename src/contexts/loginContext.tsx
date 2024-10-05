@@ -1,7 +1,6 @@
 import React, { createContext, useState, useContext, ReactNode } from 'react';
 import { api } from '../api';
 import { User } from '../@types';
-import { useNavigate } from 'react-router-dom';
 
 interface AuthContextType {
     user: User | null;
@@ -18,7 +17,10 @@ interface LoginRequest {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-    const navigate = useNavigate()
+
+    const navigate = (path: string) => {
+        window.location.href = path;
+    }
 
     const [user, setUser] = useState<User | null>(null);
 
@@ -39,11 +41,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
     const logout = () => {
         setUser(null);
-        navigate("/")
+        navigate('/')
     };
 
     return (
-        <AuthContext.Provider value={{ user, login, logout, navigate }}>
+        <AuthContext.Provider value={{ user, login, logout, navigate}}>
             {children}
         </AuthContext.Provider>
     );
