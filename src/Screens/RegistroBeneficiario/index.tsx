@@ -2,10 +2,13 @@ import { useState } from 'react';
 import '@styles/global.scss';
 import '@styles/registro.scss';
 import { api } from '../../api';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { z } from 'zod';
 
 const Registro = () => {
     const navigate = useNavigate();
+
+    const location = useLocation();
 
     const [nomeFamilia, setNomeFamilia] = useState('');
     const [statusFamilia, setStatusFamilia] = useState('');
@@ -24,29 +27,55 @@ const Registro = () => {
     const createFamilia = async () => {
         if (!nomeFamilia || !statusFamilia || !nomePrincipal || !cpf || !endereco || !cep || !rendaMensal || !telefone1 || !familiarExtras || !dadosImovel || !necessidadeFamilia) {
             alert('Por favor, preencha todos os campos.');
+        }
+        
+
+        const familiaSchema = z.object({
+            nomeFamilia: z.string(),
+            statusFamilia: z.string(),
+            nomePrincipal: z.string(),
+            cpf: z.string().length(11),
+            endereco: z.string(),
+            cep: z.string().length(8),
+            rendaMensal: z.string(),
+            telefone1: z.string(),
+            telefone2: z.string().optional(),
+            comoChegou: z.string().optional(),
+            familiarExtras: z.string(),
+            dadosImovel: z.string(),
+            necessidadeFamilia: z.string(),
+        });
+
+        const validationResult = familiaSchema.safeParse({
+            nomeFamilia,
+            statusFamilia,
+            nomePrincipal,
+            cpf,
+            endereco,
+            cep,
+            rendaMensal,
+            telefone1,
+            telefone2,
+            comoChegou,
+            familiarExtras,
+            dadosImovel,
+            necessidadeFamilia,
+        });
+
+        if (!validationResult.success) {
+            alert(validationResult.error.errors.map(err => err.message).join('\n'));
             return;
         }
 
-        const data = {
-            id: Math.floor(Math.random() * 999) + 1,
-            name: nomeFamilia,
-            status: statusFamilia,
-            principal: nomePrincipal,
-            cpf: cpf,
-            endereco: endereco,
-            cep: cep,
-            rendaMensal: rendaMensal,
-            telefone1: telefone1,
-            telefone2: telefone2,
-            comoChegou: comoChegou,
-            familiarExtras: familiarExtras,
-            dadosImovel: dadosImovel,
-            necessidadeFamilia: necessidadeFamilia,
-        };
+        const {data} = validationResult
 
         try {
             await api.post('/familias', data);
-            navigate('/beneficiarios');
+            if(location.pathname.includes("dashboard")) {
+                navigate('/dashboard/beneficiarios');
+            } else {
+                navigate('/beneficiarios');
+            }
         } catch (err) {
             console.log('Erro durante o registro: ' + err);
         }
@@ -67,6 +96,12 @@ const Registro = () => {
         setFamiliarExtras('');
         setDadosImovel('');
         setNecessidadeFamilia('');
+
+        if(location.pathname.includes("dashboard")) {
+            navigate('/dashboard/beneficiarios');
+        } else {
+            navigate('/beneficiarios');
+        }
     };
 
     return (

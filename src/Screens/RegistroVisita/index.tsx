@@ -29,7 +29,11 @@ const RegistroVisita = () => {
 
         try {
             await api.post('/visitas', data);
-            navigate('/beneficiarios');
+            if(location.pathname.includes("dashboard")) {
+                navigate('/dashboard/beneficiarios');
+            } else {
+                navigate('/beneficiarios');
+            }
         } catch (err) {
             console.log('Erro durante o registro: ' + err);
         }
@@ -41,6 +45,11 @@ const RegistroVisita = () => {
         setRelatorio('');
         setDropdown1('');
         setImagem(null);
+        if(location.pathname.includes("dashboard")) {
+            navigate('/dashboard/beneficiarios');
+        } else {
+            navigate('/beneficiarios');
+        }
     };
 
     return (

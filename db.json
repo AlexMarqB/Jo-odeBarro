@@ -1,10 +1,51 @@
 {
-  "familias": [],
+  "familias": [
+    {
+      "id": 294,
+      "name": "asdad",
+      "status": "Aprovado",
+      "principal": "asdad",
+      "cpf": "asdasd",
+      "endereco": "adasd",
+      "cep": "asdasd",
+      "rendaMensal": "adas",
+      "telefone1": "asdasd",
+      "telefone2": "adasd",
+      "comoChegou": "adasd",
+      "familiarExtras": "1",
+      "dadosImovel": "Alugado",
+      "necessidadeFamilia": "Só reforma"
+    },
+    {
+      "id": 423,
+      "name": "adas",
+      "status": "Negado",
+      "principal": "dasd",
+      "cpf": "dadas",
+      "endereco": "dads",
+      "cep": "dasdasd",
+      "rendaMensal": "dqasda",
+      "telefone1": "d",
+      "telefone2": "qsdsd",
+      "comoChegou": "d",
+      "familiarExtras": "1",
+      "dadosImovel": "Casa",
+      "necessidadeFamilia": "Construção"
+    }
+  ],
   "visitas": [],
   "users": [
     {
-      "email": "teste@gmail.com",
-      "password": "1234"
+      "id": 1,
+      "email": "benef@email.com",
+      "password": "123456",
+      "role": "BENEFICIARIO"
+    },
+    {
+      "id": 2,
+      "email": "volun@email.com",
+      "password": "123456",
+      "role": "VOLUNTARIO"
     }
   ]
 }

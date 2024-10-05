@@ -2,31 +2,15 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import "@styles/global.scss";
 import { api } from "../../api";
-
-export interface Familia {
-  id: number;
-  name: string;
-  renda: number;
-  situacao: string;
-  numeroFamiliares: number;
-  priority: boolean;
-  status: string;
-}
-
-export interface Visit {
-  nomeFamilia: any;
-  id: number;
-  name: string;
-  data: string;
-  relatorio: string;
-}
+import { Familia, Visit } from "../../@types";
 
 export function Beneficiarios() {
   const [activeTab, setActiveTab] = useState<'familias' | 'visitas'>('familias');
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
 
-  const [familiasData, setFamiliasData] = useState<Familia[]>([]);
+  const [familias, setFamilias] = useState<Familia[]>([]);
+  const [filteredFamilies, setFilteredFamilies] = useState<Familia[]>([]);
   const [visitasData, setVisitasData] = useState<Visit[]>([]);
 
   const handleTabClick = (tab: 'familias' | 'visitas') => {
@@ -39,7 +23,7 @@ export function Beneficiarios() {
     if (!confirmDelete) return;
 
     try {
-      await api.delete(`dashboard/familias/${id}`);
+      await api.delete(`/dashboard/familias/${id}`);
       console.log('Item excluído com sucesso!');
       fetchData();
     } catch (err) {
@@ -52,7 +36,7 @@ export function Beneficiarios() {
     if (!confirmDelete) return;
   
     try {
-      await api.delete(`dashboard/visitas/${id}`);
+      await api.delete(`/dashboard/visitas/${id}`);
       console.log('Visita excluída com sucesso!');
       fetchData();
     } catch (err) {
@@ -61,21 +45,31 @@ export function Beneficiarios() {
   };
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(event.target.value);
+    const value = event.target.value;
+    setSearchTerm(value); // Atualiza o estado do termo de busca
+
+    // Verifica se o campo de busca está vazio
+    if (value.trim() === '') {
+      setFilteredFamilies(familias); // Se vazio, mostra todas as famílias
+    } else {
+      // Filtra as famílias conforme o termo de busca
+      setFilteredFamilies(familias.filter(item => item.name.toLowerCase().includes(value.toLowerCase())));
+    }
   };
 
   const fetchData = async () => {
     if (activeTab === 'familias') {
       try {
-        const response = await api.get("dashboard/familias");
-        setFamiliasData(response.data);
+        const response = await api.get("/familias");
+        setFamilias(response.data);
+        setFilteredFamilies(response.data); // Atualiza o estado com as famílias recebidas
       } catch (err) {
         console.log("Error during fetch: " + err);
       }
     }
     if (activeTab === 'visitas') {
       try {
-        const response = await api.get("dashboard/visitas");
+        const response = await api.get("/visitas");
         setVisitasData(response.data);
       } catch (err) {
         console.log("Error during fetch: " + err);
@@ -89,11 +83,7 @@ export function Beneficiarios() {
 
   const renderTableData = () => {
     if (activeTab === 'familias') {
-      const filteredFamilias = familiasData.filter(item =>
-        item?.name?.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-  
-      return filteredFamilias.map((item) => (
+      return filteredFamilies.map((item) => (
         <tr key={item.id}>
           <td>{item.name}</td>
           <td>
@@ -102,7 +92,7 @@ export function Beneficiarios() {
           <td>
             <button
               className="table-btn dados-btn"
-              onClick={() => navigate(`dashboard/atualizar/${item.id}`)}
+              onClick={() => navigate(`/dashboard/atualizar/${item.id}`)}
             >
               DADOS
             </button>
@@ -124,7 +114,7 @@ export function Beneficiarios() {
           <td>
             <button
               className="table-btn dados-btn"
-              onClick={() => navigate(`dashboard/visitas/${item.id}`)}
+              onClick={() => navigate(`/dashboard/visitas/${item.id}`)}
             >
               DADOS
             </button>
@@ -133,13 +123,10 @@ export function Beneficiarios() {
         </tr>
       ));
     }
-    
-  
+
     return null;
   };
   
-  
-
   return (
     <div className="beneficiarios-page">
       <div className="dashboard-header">
@@ -158,9 +145,9 @@ export function Beneficiarios() {
             onChange={handleSearchChange}
           />
           <div className="buttons">
-            <button className="btn registrar-btn" onClick={() => navigate('dashboard/registro')}>Registrar Família</button>
+            <button className="btn registrar-btn" onClick={() => navigate('/dashboard/registro')}>Registrar Família</button>
             {activeTab === 'visitas' && (
-              <button className="btn enviar-btn" onClick={() => navigate('dashborad/registroVisita')}>Adicionar Visita</button>
+              <button className="btn enviar-btn" onClick={() => navigate('/dashboard/registroVisita')}>Adicionar Visita</button>
             )}
             {activeTab === 'familias' && (
               <button className="btn enviar-btn" onClick={() => {}}>

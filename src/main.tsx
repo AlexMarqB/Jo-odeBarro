@@ -4,9 +4,12 @@ import App from "./App.tsx";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import "@styles/global.scss";
+import { AuthProvider } from "./contexts/loginContext.tsx";
 
 createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <App />
-  </StrictMode>
+	<StrictMode>
+		<AuthProvider>
+			<App />
+		</AuthProvider>
+	</StrictMode>
 );

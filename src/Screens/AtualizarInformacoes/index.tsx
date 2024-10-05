@@ -4,26 +4,28 @@ import { api } from '../../api';
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { AxiosError } from 'axios';
+import { z } from 'zod';
 
 function isAxiosError(error: unknown): error is AxiosError {
     return (error as AxiosError).isAxiosError !== undefined;
 }
+
 const AtualizarInformacoes = () => {
     const { familiaId } = useParams();
     const navigate = useNavigate();
-    const [name, setName] = useState("");
-    const [status, setStatus] = useState("");
-    const [nomePrincipal, setNomePrincipal] = useState("");
-    const [cpf, setCpf] = useState("");
-    const [endereco, setEndereco] = useState("");
-    const [cep, setCep] = useState("");
-    const [renda, setRenda] = useState("");
-    const [telefone, setTelefone] = useState("");
-    const [telefone2, setTelefone2] = useState("");
-    const [comoChegou, setComoChegou] = useState("");
-    const [familiarExtras, setFamiliarExtras] = useState("");
-    const [dadosImovel, setDadosImovel] = useState("");
-    const [necessidadeFamilia, setNecessidadeFamilia] = useState("");
+    const [nomeFamilia, setNomeFamilia] = useState('');
+    const [statusFamilia, setStatusFamilia] = useState('');
+    const [nomePrincipal, setNomePrincipal] = useState('');
+    const [cpf, setCpf] = useState('');
+    const [endereco, setEndereco] = useState('');
+    const [cep, setCep] = useState('');
+    const [rendaMensal, setRendaMensal] = useState('');
+    const [telefone1, setTelefone1] = useState('');
+    const [telefone2, setTelefone2] = useState('');
+    const [comoChegou, setComoChegou] = useState('');
+    const [familiarExtras, setFamiliarExtras] = useState('');
+    const [dadosImovel, setDadosImovel] = useState('');
+    const [necessidadeFamilia, setNecessidadeFamilia] = useState('');
 
     useEffect(() => {
         const fetchFamilia = async () => {
@@ -31,14 +33,14 @@ const AtualizarInformacoes = () => {
                 const response = await api.get(`/familias/${familiaId}`);
                 const familia = response.data;
 
-                setName(familia.name || "");
-                setStatus(familia.status || "");
+                setNomeFamilia(familia.nomeFamilia || "");
+                setStatusFamilia(familia.statusFamilia || "");
                 setNomePrincipal(familia.nomePrincipal || "");
                 setCpf(familia.cpf || "");
                 setEndereco(familia.endereco || "");
                 setCep(familia.cep || "");
-                setRenda(familia.renda || "");
-                setTelefone(familia.telefone || "");
+                setRendaMensal(familia.rendaMensal || "");
+                setTelefone1(familia.telefone1 || "");
                 setTelefone2(familia.telefone2 || "");
                 setComoChegou(familia.comoChegou || "");
                 setFamiliarExtras(familia.familiarExtras || "");
@@ -60,54 +62,84 @@ const AtualizarInformacoes = () => {
         fetchFamilia();
     }, [familiaId]);
 
-
     const atualizarFamilia = async () => {
-        if (!name || !status || !nomePrincipal || !cpf || !endereco || !cep || !renda || !telefone || !telefone2 || !comoChegou || !familiarExtras || !dadosImovel || !necessidadeFamilia) {
-            alert("Por favor, preencha todos os campos.");
+        if (!nomeFamilia || !statusFamilia || !nomePrincipal || !cpf || !endereco || !cep || !rendaMensal || !telefone1 || !familiarExtras || !dadosImovel || !necessidadeFamilia) {
+            alert('Por favor, preencha todos os campos.');
             return;
         }
 
-        const data = {
-            name,
-            status,
+        const familiaSchema = z.object({
+            nomeFamilia: z.string(),
+            statusFamilia: z.string(),
+            nomePrincipal: z.string(),
+            cpf: z.string().length(11),
+            endereco: z.string(),
+            cep: z.string().length(8),
+            rendaMensal: z.string(),
+            telefone1: z.string(),
+            telefone2: z.string().optional(),
+            comoChegou: z.string().optional(),
+            familiarExtras: z.string(),
+            dadosImovel: z.string(),
+            necessidadeFamilia: z.string(),
+        });
+
+        const validationResult = familiaSchema.safeParse({
+            nomeFamilia,
+            statusFamilia,
             nomePrincipal,
             cpf,
             endereco,
             cep,
-            renda,
-            telefone,
+            rendaMensal,
+            telefone1,
             telefone2,
             comoChegou,
             familiarExtras,
             dadosImovel,
             necessidadeFamilia,
-        };
+        });
+
+        if (!validationResult.success) {
+            console.error("Validation failed: ", validationResult.error);
+            return;
+        }
+
+        const { data } = validationResult;
 
         try {
             await api.put(`/familias/${familiaId}`, data);
             console.log("Family updated successfully!");
 
-            navigate('/beneficiarios');
+            if (location.pathname.includes("dashboard")) {
+                navigate('/dashboard/beneficiarios');
+            } else {
+                navigate('/beneficiarios');
+            }
         } catch (err) {
             console.error("Error during update: " + err);
         }
     };
 
     const resetForm = () => {
-        setName("");
-        setStatus("");
+        setNomeFamilia("");
+        setStatusFamilia("");
         setNomePrincipal("");
         setCpf("");
         setEndereco("");
         setCep("");
-        setRenda("");
-        setTelefone("");
+        setRendaMensal("");
+        setTelefone1("");
         setTelefone2("");
         setComoChegou("");
         setFamiliarExtras("");
         setDadosImovel("");
         setNecessidadeFamilia("");
-        navigate('/beneficiarios');
+        if (location.pathname.includes("dashboard")) {
+            navigate('/dashboard/beneficiarios');
+        } else {
+            navigate('/beneficiarios');
+        }
     };
 
     return (
@@ -121,8 +153,8 @@ const AtualizarInformacoes = () => {
                     <label>Nome da Família:</label>
                     <input
                         type="text"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
+                        value={nomeFamilia}
+                        onChange={(e) => setNomeFamilia(e.target.value)}
                         placeholder="Nome da Família"
                     />
                     
@@ -161,16 +193,16 @@ const AtualizarInformacoes = () => {
                     <label>Renda Mensal:</label>
                     <input
                         type="text"
-                        value={renda}
-                        onChange={(e) => setRenda(e.target.value)}
+                        value={rendaMensal}
+                        onChange={(e) => setRendaMensal(e.target.value)}
                         placeholder="Renda Mensal"
                     />
 
                     <label>Telefone:</label>
                     <input
                         type="text"
-                        value={telefone}
-                        onChange={(e) => setTelefone(e.target.value)}
+                        value={telefone1}
+                        onChange={(e) => setTelefone1(e.target.value)}
                         placeholder="Telefone"
                     />
 
@@ -195,7 +227,7 @@ const AtualizarInformacoes = () => {
                     <div className="dropdown-group">
 
                         <label>Status da Família:</label>
-                        <select value={status} onChange={(e) => setStatus(e.target.value)} >
+                        <select value={statusFamilia} onChange={(e) => setStatusFamilia(e.target.value)} >
                             <option value="">Selecione uma opção</option>
                             <option value="Aprovado">Aprovado</option>
                             <option value="Negado">Negado</option>

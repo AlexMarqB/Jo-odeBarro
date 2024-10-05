@@ -1,14 +1,16 @@
 import { BiArrowBack } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
 import LoginForm from "../../components/LoginForm";
+import { useAuth } from "../../contexts/loginContext";
 
 export const Login = () => {
   const navigate = useNavigate();
 
-  const handleLogin = (email: string, password: string) => {
-    console.log("Email:", email);
-    console.log("Password:", password);
-  };
+  const {user} = useAuth()
+
+  if(user) {
+    navigate('/dashboard')
+  }
 
   return (
     <div className="d-flex justify-content-center align-items-center vh-100">
@@ -25,7 +27,7 @@ export const Login = () => {
 
         <div className="card p-4 mt-2">
           <h2 className="text-center mb-4">Login</h2>
-          <LoginForm onLogin={handleLogin} />
+          <LoginForm/>
         </div>
       </div>
     </div>
